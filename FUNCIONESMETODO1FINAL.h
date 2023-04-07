@@ -81,15 +81,12 @@ void archivo_TO_binario(string nombre_archivo){//recibe nombre del archivo para 
 
 
 //FUNCION ABRIR ARCHIVO  QUE YA ESTA EN BINARIO PARA CODIFICARLO
-void codificarArchivo(string archivo_entrada,string archivo_sal){// se puede ingresar el mismo archivo para entrada y salida
-	int x,contc=0,contu=0,regla=1;// x es la semilla
+void codificarArchivo(string archivo_entrada,string archivo_sal,int semi){// se puede ingresar el mismo archivo para entrada y salida
+	int x=semi,contc=0,contu=0,regla=1;// x es la semilla
 	string linea;// getline
-	string linea2;// caracter a caracter de la linea getlines
+	string linea2,lineaprincipal;// caracter a caracter de la linea getlines
 	ifstream archivo;// SINTAXIS PARA DECLARA VARIABLE PARA ARCHIVOS
 	archivo.open(archivo_entrada);//ABRIMOS EL ARCHIVO
-	cout<<"Ingres La Semilla Mi Pez ";
-	cin>> x;
-	ofstream archivo_salida(archivo_sal); // abrir el archivo en modo de escritura
  
 	
 	while(archivo.good()){
@@ -103,7 +100,7 @@ void codificarArchivo(string archivo_entrada,string archivo_sal){// se puede ing
 			}
 			if(bloque==x){
 				linea2 =codibloq(linea2,regla);
-				archivo_salida << linea2; // escribir la variable linea2 en el archivo
+				lineaprincipal = lineaprincipal + linea2;
 				linea2.clear();
 				regla =Regla(contc,contu);
 				bloque=1;
@@ -115,11 +112,13 @@ void codificarArchivo(string archivo_entrada,string archivo_sal){// se puede ing
 		}
 		contc=0;contu=0;
 		linea2 =codibloq(linea2,regla);
-		archivo_salida << linea2<<'\n'; // escribir la variable linea2 en el archivo
+		lineaprincipal = lineaprincipal + linea2 + '\n';
 		linea2.clear();
 		
 	}
 	archivo.close();
+	ofstream archivo_salida(archivo_sal); // abrir el archivo en modo de escritura
+	archivo_salida << lineaprincipal;
 	archivo_salida.close(); // cerrar el archivo
 }
 
@@ -151,15 +150,13 @@ string desencriptar_linea(string linea, int semilla){
 	}
 	return lineaprincipal;
 }
-void desencriptarArchivo(string archivo_entrada,string archivo_sal){// se puede ingresar el mismo archivo para entrada y salida
-	int x,contcd=0,contud=0,regla=1;// x es la semilla
+void desencriptarArchivo(string archivo_entrada,string archivo_sal,int semi){// se puede ingresar el mismo archivo para entrada y salida
+	int x= semi,contcd=0,contud=0,regla=1;// x es la semilla
 	string linea;// getline
-	string linea2;// caracter a caracter de la linea getlines
+	string linea2,lineaprincipal;// caracter a caracter de la linea getlines
 	ifstream archivo;// SINTAXIS PARA DECLARA VARIABLE PARA ARCHIVOS
 	archivo.open(archivo_entrada);//ABRIMOS EL ARCHIVO
-	cout<<"Ingres La Semilla Mi Pez ";
-	cin>> x;
-	ofstream archivo_salida(archivo_sal); // abrir el archivo en modo de escritura
+	
  
 	while(archivo.good()){
 		getline(archivo,linea);//LEEMOS EL ARCHIVO POR LINEA
@@ -174,7 +171,7 @@ void desencriptarArchivo(string archivo_entrada,string archivo_sal){// se puede 
 						contud++;
 					}	
 				}
-			archivo_salida << linea2;
+			lineaprincipal = lineaprincipal+linea2;
 			linea2.clear();
 			regla =Regla(contcd,contud);
 			bloque=1;
@@ -186,10 +183,65 @@ void desencriptarArchivo(string archivo_entrada,string archivo_sal){// se puede 
 	}
 		contcd=0;contud=0;
 		linea2 =codibloq(linea2,regla);
-		archivo_salida << linea2<<'\n'; // escribir la variable linea2 en el archivo
+		lineaprincipal = lineaprincipal+linea2;
 		linea2.clear();
 		
 	}
 	archivo.close();
+	ofstream archivo_salida(archivo_sal); // abrir el archivo en modo de escritura
+	archivo_salida<<lineaprincipal;
 	archivo_salida.close(); // cerrar el archivo
 }
+
+
+// funciones metodo 2
+
+//invertir palabra
+string invertirpal(string cadena) {
+    string invertida = "";
+    for (int i = cadena.length() - 1; i >= 0; i--) {
+        invertida += cadena[i];
+    }
+    return invertida;
+}
+
+
+
+
+//FUNCION ABRIR ARCHIVO  QUE YA ESTA EN BINARIO PARA CODIFICARLO
+void codificarArchivoM2(string archivo_entrada,string archivo_sal,int semi){// se puede ingresar el mismo archivo para entrada y salida
+	int x;// x es la semilla
+	string linea;// getline
+	string linea2,lineatodo="";// caracter a caracter de la linea getlines
+	ifstream archivo;// SINTAXIS PARA DECLARA VARIABLE PARA ARCHIVOS
+	archivo.open(archivo_entrada);//ABRIMOS EL ARCHIVO
+	cout<<"Ingres La Semilla Mi Pez ";
+	x=semi;
+
+ 
+	
+	while(archivo.good()){
+		getline(archivo,linea);//LEEMOS EL ARCHIVO POR LINEA
+		for(int i = 0, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CARACTER A CARACTER
+			linea2 += linea[i];
+			if(bloque==x){
+				linea2 = invertirpal(linea2);
+				lineatodo = lineatodo+ linea2; // escribir la variable linea2 en el archivo
+				linea2.clear();
+				bloque=1;
+			}else{
+				bloque++;
+			}
+		}
+		linea2 = invertirpal(linea2);
+		lineatodo = lineatodo+ linea2 ; // escribir la variable linea2 en el archivo
+		lineatodo = lineatodo+ '\n';
+		linea2.clear();
+		
+	}cout<<lineatodo<<endl;
+	archivo.close();
+	ofstream archivo_salida(archivo_sal); // abrir el archivo en modo de escritura
+	archivo_salida<< lineatodo;
+	archivo_salida.close(); // cerrar el archivo
+}
+
