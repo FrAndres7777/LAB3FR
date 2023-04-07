@@ -80,9 +80,6 @@ void archivo_TO_binario(string nombre_archivo){//recibe nombre del archivo para 
 
 
 
-
-
-
 //FUNCION ABRIR ARCHIVO  QUE YA ESTA EN BINARIO PARA CODIFICARLO
 void codificarArchivo(string archivo_entrada,string archivo_sal){// se puede ingresar el mismo archivo para entrada y salida
 	int x,contc=0,contu=0,regla=1;// x es la semilla
@@ -99,17 +96,14 @@ void codificarArchivo(string archivo_entrada,string archivo_sal){// se puede ing
 		getline(archivo,linea);//LEEMOS EL ARCHIVO POR LINEA
 		for(int i = 0, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CCARACTYER A CARACTER
 			linea2 += linea[i];
-			cout<<linea[i];
 			if(linea[i]==48){
 				contc++;
 			}else{
 				contu++;
 			}
 			if(bloque==x){
-				cout<<"\t"<<contc<<"  "<<contu<<"     ";
 				linea2 =codibloq(linea2,regla);
 				archivo_salida << linea2; // escribir la variable linea2 en el archivo
-				cout<<linea2<<endl;
 				linea2.clear();
 				regla =Regla(contc,contu);
 				bloque=1;
@@ -119,13 +113,77 @@ void codificarArchivo(string archivo_entrada,string archivo_sal){// se puede ing
 				bloque++;
 			}
 		}
-		cout<<'\t'<<contc<<"  "<<contu;contc=0;contu=0;
+		contc=0;contu=0;
 		linea2 =codibloq(linea2,regla);
 		archivo_salida << linea2<<'\n'; // escribir la variable linea2 en el archivo
-		cout<<"\t"<<linea2<<endl;
 		linea2.clear();
 		
 	}
 	archivo.close();
 	archivo_salida.close(); // cerrar el archivo
 }
+
+// funcion desencriptar linea
+string desencriptar_linea(string linea, int semilla){
+	int ii =0,contcd=0,contud=0,regla;
+	string linea2,lineaprincipal;
+	while(ii < semilla){
+		if(linea[ii]=='0'){
+			contcd++;
+		}else{
+			contud++;
+		}
+		linea2 +=linea[ii];
+		ii++;
+	}
+	linea2 =codibloq(linea2,1);
+	lineaprincipal = lineaprincipal + linea2;
+	if(contcd==(semilla/2)){
+		regla =1;
+	}else if (contcd > (semilla/2)){
+		regla=3;
+	}else{
+		regla=2;
+	}contcd=0;contud=0;
+	linea2.clear();
+	for(int i = ii, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CCARACTYER A CARACTER
+		linea2 += linea[i];
+		if(bloque==semilla){
+			linea2 =codibloq(linea2,regla);
+			for(int j = 0 ; linea2[j]!= '\0'; j++){
+				if(linea2[j]=='0'){
+					contcd++;
+				}else{
+					contud++;
+				}	
+			}
+			lineaprincipal = lineaprincipal + linea2;
+			linea2.clear();
+			regla =Regla(contcd,contud);
+			bloque=1;
+			contcd=0;
+			contud=0;
+		}else{
+			bloque++;
+		}
+		
+	}
+	return lineaprincipal;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
