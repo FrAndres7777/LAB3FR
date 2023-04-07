@@ -125,28 +125,9 @@ void codificarArchivo(string archivo_entrada,string archivo_sal){// se puede ing
 
 // funcion desencriptar linea
 string desencriptar_linea(string linea, int semilla){
-	int ii =0,contcd=0,contud=0,regla;
+	int contcd=0,contud=0,regla=1;
 	string linea2,lineaprincipal;
-	while(ii < semilla){
-		if(linea[ii]=='0'){
-			contcd++;
-		}else{
-			contud++;
-		}
-		linea2 +=linea[ii];
-		ii++;
-	}
-	linea2 =codibloq(linea2,1);
-	lineaprincipal = lineaprincipal + linea2;
-	if(contcd==(semilla/2)){
-		regla =1;
-	}else if (contcd > (semilla/2)){
-		regla=3;
-	}else{
-		regla=2;
-	}contcd=0;contud=0;
-	linea2.clear();
-	for(int i = ii, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CCARACTYER A CARACTER
+	for(int i = 0, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CCARACTYER A CARACTER
 		linea2 += linea[i];
 		if(bloque==semilla){
 			linea2 =codibloq(linea2,regla);
@@ -170,20 +151,45 @@ string desencriptar_linea(string linea, int semilla){
 	}
 	return lineaprincipal;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void desencriptarArchivo(string archivo_entrada,string archivo_sal){// se puede ingresar el mismo archivo para entrada y salida
+	int x,contcd=0,contud=0,regla=1;// x es la semilla
+	string linea;// getline
+	string linea2;// caracter a caracter de la linea getlines
+	ifstream archivo;// SINTAXIS PARA DECLARA VARIABLE PARA ARCHIVOS
+	archivo.open(archivo_entrada);//ABRIMOS EL ARCHIVO
+	cout<<"Ingres La Semilla Mi Pez ";
+	cin>> x;
+	ofstream archivo_salida(archivo_sal); // abrir el archivo en modo de escritura
+ 
+	while(archivo.good()){
+		getline(archivo,linea);//LEEMOS EL ARCHIVO POR LINEA
+		for(int i = 0, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CCARACTYER A CARACTER
+			linea2 += linea[i];
+			if(bloque==x){
+				linea2 =codibloq(linea2,regla);
+				for(int j = 0 ; linea2[j]!= '\0'; j++){
+					if(linea2[j]=='0'){
+						contcd++;
+					}else{
+						contud++;
+					}	
+				}
+			archivo_salida << linea2;
+			linea2.clear();
+			regla =Regla(contcd,contud);
+			bloque=1;
+			contcd=0;
+			contud=0;
+		}else{
+			bloque++;
+		}
+	}
+		contcd=0;contud=0;
+		linea2 =codibloq(linea2,regla);
+		archivo_salida << linea2<<'\n'; // escribir la variable linea2 en el archivo
+		linea2.clear();
+		
+	}
+	archivo.close();
+	archivo_salida.close(); // cerrar el archivo
+}
