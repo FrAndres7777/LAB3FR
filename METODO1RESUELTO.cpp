@@ -1,5 +1,4 @@
-#include "FUNCIONESM1.h"
+#include "FUNCIONESMETODO1FINAL.h"
 int main (){
-	archivo_TO_binario("data3.txt");
-	codificarArchivo("data3.txt","data4.txt");
+	menu();
 }
