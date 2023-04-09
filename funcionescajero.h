@@ -1,5 +1,95 @@
 #include "FUNCIONESMETODO1FINAL.h"
+int contarLineas(string nombreArchivo) {
+    ifstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo " << nombreArchivo << endl;
+        return -1;
+    }
 
+    int cantLineas = 0;
+    string linea;
+    while (getline(archivo, linea)) {
+        cantLineas++;
+    }
+    archivo.close();
+
+    return cantLineas;
+}
+
+string* iterarArchivo(string nombreArchivo, int& cantLineas) {
+    ifstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo " << nombreArchivo << endl;
+        return nullptr;
+    }
+
+    cantLineas = 0;
+    string linea;
+    while (getline(archivo, linea)) {
+        cantLineas++;
+    }
+    archivo.close();
+
+    string* lineasArchivo = new string[cantLineas];
+    archivo.open(nombreArchivo);
+    int i = 0;
+    while (getline(archivo, linea)) {
+        lineasArchivo[i] = linea;
+        i++;
+    }
+    archivo.close();
+    return lineasArchivo;
+}
+
+
+
+
+
+void registroarchivousuarios(){
+	bool uservery=true;
+	string linea,usuarioR,passwordR,saldoR;
+	cout << "Ingrese Cuidadosamente \n\tUsuario : ";cin>>usuarioR;
+	cout<< "\tPassword : ";cin>> passwordR;
+	cout << "\tSaldo";cin>> saldoR;
+	usuarioR= lineabincodi(usuarioR) ;
+	//
+	int cantLineas;
+    string nombreArchivo = "usuarios.txt";
+    string* lineas = iterarArchivo(nombreArchivo, cantLineas);
+    while (uservery){
+    	uservery=false;
+    	for (int i = 0; i < cantLineas; i++) {
+        	if(lineas[i]==usuarioR){
+        		uservery = true;
+			}
+    	}if(uservery){
+    		cout<<"\t USUARIO NO VALIDO INGRESE NUEVO";
+    		usuarioR.clear();
+    		cin>>usuarioR;
+    		usuarioR= lineabincodi(usuarioR);
+		}
+	}
+    delete[] lineas;
+    usuarioR= usuarioR+ '\n';
+	
+	
+	
+	
+	
+	//
+	passwordR= lineabincodi(passwordR) + '\n';
+	saldoR=lineabincodi(saldoR) ;
+	linea = linea + usuarioR+passwordR+saldoR;
+    ofstream archivo("usuarios.txt", ios::app); // ios::app para abrir en modo append
+    if (archivo.is_open()) { // verificamos si el archivo se abrió correctamente
+        archivo << linea << endl;
+        archivo.close(); // cerramos el archivo
+    }
+    else {
+        cout << "No se pudo abrir el archivo" << endl;
+    }
+    return ;
+}
 
 
 void abrirArchivoAdmin() {
@@ -34,10 +124,10 @@ void abrirArchivoAdmin() {
     	getline(archivoEntrada, linea);
     	getline(archivoEntrada, linea2);
 		do{
-			    	cout<<"iniciar Seccion "<<endl;
-    	cout << "Ingrese ID: ";cin>>user;
+			    	cout<<"\n  iniciar Seccion \n"<<endl;
+    	cout << "\t Ingrese ID: ";cin>>user;
     	user = lineabincodi(user);
-		cout << "Ingrese Contraseña: ";cin>>passw;
+		cout << "\t Ingrese Contraseña: ";cin>>passw;
 		passw=lineabincodi(passw);
         // Leer el contenido del archivo y mostrarlo en pantalla
     	if(linea!= user){flag =false;
@@ -46,8 +136,26 @@ void abrirArchivoAdmin() {
 		if(linea2!= passw or flag == false){flag =false;
 		}else{flag=true;
 		}
+		int opcion;
 		if(flag){
-			cout<<"inicio seccion con exito";
+			cout<<"\n   inicio seccion con exito";
+			while (flag) { // repetimos hasta que el usuario quiera salir
+       	 		cout << "\t   Elija una opcion:" << endl;
+        		cout << "\t\t1. Agregar usuarios" << endl;
+       			cout << "\t\t2. Salir" << endl;
+       			cin >> opcion;
+       			switch (opcion) {
+		            case 1:
+		                registroarchivousuarios();
+		                break;
+		            case 2:
+		                flag = false;
+		                break;
+		            default:
+		                cout << "Opcion invalida. Solo puede salir al ingresar 2." << endl;
+		                break;
+		        }
+		    }flag = true;
 		}else{
 			cout<<"ID o PassWord INCORECCTOS ";
 		}
@@ -85,5 +193,6 @@ void menucajero(){
     } while (opcion != 3);
 
 }
+
 
 
