@@ -82,8 +82,6 @@ void archivo_TO_binario(string nombre_archivo){//recibe nombre del archivo para 
   archivo_salida.close(); // cerrar el archivo
 }
 
-
-
 //FUNCION ABRIR ARCHIVO  QUE YA ESTA EN BINARIO PARA CODIFICARLO
 void codificarArchivo(string archivo_entrada,string archivo_sal,int semi){// se puede ingresar el mismo archivo para entrada y salida
 	int x=semi,contc=0,contu=0,regla=1;// x es la semilla
@@ -96,7 +94,6 @@ void codificarArchivo(string archivo_entrada,string archivo_sal,int semi){// se 
     	return ;
 	}
  
-	
 	while(archivo.good()){
 		getline(archivo,linea);//LEEMOS EL ARCHIVO POR LINEA
 		for(int i = 0, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CCARACTYER A CARACTER
@@ -169,8 +166,6 @@ void desencriptarArchivo(string archivo_entrada,string archivo_sal,int semi){// 
     	cout<< "Error al abrir el archivo\n";
     	return ;
 	}
-	
- 
 	while(archivo.good()){
 		getline(archivo,linea);//LEEMOS EL ARCHIVO POR LINEA
 		for(int i = 0, bloque = 1; linea[i] != '\0'; i++){//RECORREMO0S LA LINEA CCARACTYER A CARACTER
@@ -206,7 +201,6 @@ void desencriptarArchivo(string archivo_entrada,string archivo_sal,int semi){// 
 	archivo_salida.close(); // cerrar el archivo
 }
 
-
 // funciones metodo 2
 
 //invertir palabra
@@ -217,8 +211,6 @@ string invertirpal(string cadena) {
     }
     return invertida;
 }
-
-
 
 
 //FUNCION ABRIR ARCHIVO  QUE YA ESTA EN BINARIO PARA CODIFICARLO
@@ -262,17 +254,13 @@ void codificarArchivoM2(string archivo_entrada,string archivo_sal,int semi){// s
 void crearArchivo(){
     string nombreArchivo, contenido;
     ofstream archivo;
-
     // Pedimos al usuario el nombre del archivo
     cout << "Escribe el nombre del archivo: ";
     cin >> nombreArchivo;
-
     // Agregamos la extensión .txt al nombre del archivo
     nombreArchivo += ".txt";
-
     // Creamos el archivo
     archivo.open(nombreArchivo.c_str());
-
     if (archivo.fail()) {
         cout << "Error al crear el archivo." << endl;
         return;
@@ -281,13 +269,11 @@ void crearArchivo(){
     cout << "Quieres escribir algo en el archivo? (S/N): ";
     char opcion;
     cin >> opcion;
-
     if (opcion == 'S' || opcion == 's') {
         // Pedimos al usuario el contenido que quiere escribir
         cout << "Escribe el contenido del archivo: ";
         cin.ignore();
         getline(cin, contenido);
-
         // Escribimos el contenido en el archivo
         archivo << contenido << endl;
         cout << "Archivo creado correctamente con contenido." << endl;
@@ -295,12 +281,9 @@ void crearArchivo(){
         // Si el usuario no quiere escribir en el archivo, lo dejamos vacío
         cout << "Archivo creado correctamente sin contenido." << endl;
     }
-
     // Cerramos el archivo
     archivo.close();
 }
-
-
 
 
 
@@ -341,6 +324,52 @@ void menu() {
                 cin>>archivosalida;archivosalida+= ".txt";cout<<" Ingresa semila \n";
 				cin>> semi;
 				desencriptarArchivo(nombrearchivo,archivosalida, semi);
+                break;
+            case 4:
+                cout << "\t ¡Hasta Luego!" << endl;
+                break;
+            default:
+                cout << "\t Opcion inválida. Intente nuevamente." << endl;
+                break;
+        }
+    } while (opcion != 4);
+}
+//FUNCION MENU
+void MenuMetodo2() {
+    int opcion,semi;
+    string nombrearchivo,archivosalida;
+    
+
+    do {
+        cout << "\n\tBIENVENIDO AL MENU METODO [2] \n" << endl;
+        cout << "1. CREAR ARCHIVO / ESCRIBIRLO [1]" << endl;
+        cout << "2. ENCRIPTAR  ARCHIVO      [2]" << endl;
+        cout << "3. DESENCRIPTAR  ARCHIVO   [3]" << endl;
+        cout << "4. SALIR " << endl;
+        cin >> opcion;
+
+        switch(opcion) {
+            case 1:
+                cout << "\tElegiste La Opcion 1" << endl;
+                crearArchivo();
+                break;
+            case 2:
+                cout << "\t Opcion 2\n\n\t  *INGRESA NOMBRE DE ARCHIVO " << endl;
+                cin>>nombrearchivo;nombrearchivo+= ".txt"; 
+				cout<< "\t  *INGRESA EL ARCHIVO A GUARDAR  < Puede ser el mismo >\n";
+                cin>>archivosalida;archivosalida+= ".txt";cout<<" Ingresa semila \n";
+				cin>> semi;
+				archivo_TO_binario(nombrearchivo);// archivo a binario
+				codificarArchivoM2(nombrearchivo,archivosalida,semi);
+                break;
+            case 3:
+                cout << "\t La Opcion 3" << endl;
+                cout << "\t Opcion 2\n\n\t  *INGRESA NOMBRE DE ARCHIVO " << endl;
+                cin>>nombrearchivo;nombrearchivo+= ".txt"; 
+				cout<< "\t  *INGRESA EL ARCHIVO A GUARDAR  < Puede ser el mismo >\n";
+                cin>>archivosalida;archivosalida+= ".txt";cout<<" Ingresa semila \n";
+				cin>> semi;
+				codificarArchivoM2(nombrearchivo,archivosalida, semi);
                 break;
             case 4:
                 cout << "\t ¡Hasta Luego!" << endl;
