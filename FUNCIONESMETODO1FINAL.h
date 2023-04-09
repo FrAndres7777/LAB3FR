@@ -286,7 +286,37 @@ void crearArchivo(){
 }
 
 
+string codilinea(string linea){
+	int semilla=4;
+	string linea_retorno,lineatempo;
+	int regla= 1, contc=0,contu=0; 
+	for(int i =0 ,bloque =1; linea[i]!= '\0';i++){
+		lineatempo += linea[i];
+		if(linea[i]=='0'){
+		contc++;
+		}else{contu++;
+		}
+		if(bloque == semilla){
+			lineatempo=codibloq(lineatempo,regla);
+			linea_retorno += lineatempo;
+			regla = Regla(contc,contu);
+			lineatempo.clear();
+			contc=0,contu=0;
+			bloque=1;
+			
+			
+		}else{
+			bloque++;
+		}
+		
+	}return linea_retorno;
+}
 
+string lineabincodi(string linea){
+	linea=lineabin(linea);
+	linea = codilinea(linea);
+	return linea;
+}
 
 //FUNCION MENU
 void menu() {

@@ -1,5 +1,5 @@
 #include "FUNCIONESMETODO1FINAL.h"
 int main (){
-	menu();
-	//MenuMetodo2();
+	//menu();
+	MenuMetodo2();
 }
