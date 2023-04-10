@@ -127,9 +127,7 @@ void menuuser(){
                 break;
         }
 	}while(opcionu!= 3);
-	cout<<valor;
 	string valorStr = to_string(valor);
-	cout<<valorStr<<"h i";
     lineas[ubisaldo]=lineabincodi(valorStr);
     ofstream archivoSalida("usuarios.txt"); // Abrir archivo en modo escr
     for (int i = 0; i < cantLineas; i++) {
