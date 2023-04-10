@@ -59,8 +59,10 @@ void registroarchivousuarios(){
     while (uservery){
     	uservery=false;
     	for (int i = 0; i < cantLineas; i++) {
-        	if(lineas[i]==usuarioR){
-        		uservery = true;
+        	if(i%3==0 or i==0){
+        		if(lineas[i]==usuarioR){
+        			uservery = true;
+				}
 			}
     	}if(uservery){
     		cout<<"\t USUARIO NO VALIDO INGRESE NUEVO";
