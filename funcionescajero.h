@@ -1,20 +1,40 @@
 #include "FUNCIONESMETODO1FINAL.h"
-int contarLineas(string nombreArchivo) {
-    ifstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cout << "Error al abrir el archivo " << nombreArchivo << endl;
-        return -1;
-    }
-
-    int cantLineas = 0;
-    string linea;
-    while (getline(archivo, linea)) {
-        cantLineas++;
-    }
-    archivo.close();
-
-    return cantLineas;
+#include <cmath>
+int valorcaracter (string linea){
+	int valor=0;
+	for (int i = 0 , base = 128; linea[i] != '\0';i++,base/= 2){
+		if(linea[i]=='1'){
+			valor+= base;
+			
+		}
+	}
+	return valor-48;
 }
+int lineaEnMiles(string linea){
+	return pow(10,(linea.length()/8)-1);
+}
+
+int valorlinea(string line){
+	int valorline=0;
+	string linea;
+	int base =lineaEnMiles(line);
+	for(int i = 0 , bloque= 1; line[i]!= '\0' ; i++){
+		linea+= line[i];
+		if(bloque== 8){
+			valorline+= valorcaracter(linea)*base;
+			linea.clear();
+			bloque=1;
+			base=base/10;
+			
+			
+		}else{
+			bloque++;
+		}
+	}return valorline;
+}
+
+
+
 
 string* iterarArchivo(string nombreArchivo, int& cantLineas) {
     ifstream archivo(nombreArchivo);
@@ -40,6 +60,109 @@ string* iterarArchivo(string nombreArchivo, int& cantLineas) {
     archivo.close();
     return lineasArchivo;
 }
+
+void menuuser(){
+	int cantLineas;
+	int ubisaldo ;
+	string user,passw;
+    string nombreArchivo = "usuarios.txt";
+    string* lineas = iterarArchivo(nombreArchivo, cantLineas);
+    bool uservery= true;
+    cout << "Ingrese ID: ";cin>>user;
+	cout << "Ingrese Contraseña: ";cin>>passw;
+	user = lineabincodi(user);
+    passw=lineabincodi(passw);
+    while (uservery){
+    	for (int i = 0; i < cantLineas; i++) {
+        	if(i%3==0 or i==0){
+        		if(lineas[i]==user){
+        			uservery = false;
+        			if(lineas[i+1]!=passw){
+        				uservery=true;
+        				
+					}else{
+						ubisaldo=i+2;
+					}
+				}
+			}
+    	}if(uservery){
+    		cout<<"\t USUARIO y/o CONTRASENA INCORRECTOS";
+    		cout << "Ingrese ID: ";cin>>user;
+			cout << "Ingrese Contraseña: ";cin>>passw;
+			user = lineabincodi(user);
+    		passw=lineabincodi(passw);
+    		
+		}
+	}
+	cout<<"\n\n\tInicio De Seccion Exitoso \n\n";
+	int opcionu;
+	lineas[ubisaldo]=desencriptar_linea(lineas[ubisaldo], 4);
+	int valor= valorlinea(lineas[ubisaldo]);
+	int retiro ;
+	do {
+		cout<<"\t\tMirar Saldo   [1]\n";
+		cout<<"\t\tRetirar Cash  [2]\n";
+		cin>> opcionu;
+		switch (opcionu) {
+            case 1:
+                cout << "\t\t"<<valor << endl;
+                break;
+            case 2:
+                cout << "\t\tIngrese valor a retirar" << endl;
+                cin>>retiro;
+                if(valor <retiro+1000){
+                	cout<<"\t\tSaldo Insuficiente mi Pez";
+				}else{
+					cout<<"\t\tRetiro Realizado";
+					valor = valor - retiro - 1000;
+				}
+                
+                break;
+            case 3:
+                cout << "Saliendo..." << endl;
+                
+                break;
+            default:
+                cout << "Entrada inválida. Intente nuevamente." << endl;
+                break;
+        }
+	}while(opcionu!= 3);
+	cout<<valor;
+	string valorStr = to_string(valor);
+	cout<<valorStr<<"h i";
+    lineas[ubisaldo]=lineabincodi(valorStr);
+    ofstream archivoSalida("usuarios.txt"); // Abrir archivo en modo escr
+    for (int i = 0; i < cantLineas; i++) {
+        archivoSalida << lineas[i] << endl;
+    }
+    archivoSalida.close(); 
+    delete[] lineas;
+    
+	
+}
+
+
+
+
+
+int contarLineas(string nombreArchivo) {
+    ifstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo " << nombreArchivo << endl;
+        return -1;
+    }
+
+    int cantLineas = 0;
+    string linea;
+    while (getline(archivo, linea)) {
+        cantLineas++;
+    }
+    archivo.close();
+
+    return cantLineas;
+}
+
+
 
 
 
@@ -126,7 +249,7 @@ void abrirArchivoAdmin() {
     	getline(archivoEntrada, linea);
     	getline(archivoEntrada, linea2);
 		do{
-			    	cout<<"\n  iniciar Seccion \n"<<endl;
+		cout<<"\n  iniciar Seccion \n"<<endl;
     	cout << "\t Ingrese ID: ";cin>>user;
     	user = lineabincodi(user);
 		cout << "\t Ingrese Contraseña: ";cin>>passw;
@@ -179,8 +302,8 @@ void menucajero(){
         cin >> opcion;
         switch(opcion) {
             case 1:
-                cout << "\tHI USER" << endl;
-                break;
+            	menuuser();
+				break;
             case 2:
                 cout << "\tHI ADMIN "<< endl;
                 abrirArchivoAdmin();
