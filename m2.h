@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <bitset>
-#include <string>
 #include "FUNCIONESMETODO1FINAL.h"
 using namespace std;
 // funcion regla
@@ -51,7 +50,6 @@ void codix(string name,int semi){
     else cout<<"No abierto"<<endl;
     //Para LEEER POR LINEA
     cout<<"Por Linea: "<<endl;
-    string hi;
     int ceros=0,regla=1;
 	int cont=0,unos=0;
 	int bloque=1;
@@ -79,7 +77,6 @@ void codix(string name,int semi){
 		}	
 		    
     }
-    cout<<ceros<<" "<<unos;
 	fin.close();
 	fout.close();
 }
@@ -92,7 +89,6 @@ void codix1(string name,int semi){
     fin.open(name);
     if (fin.is_open()) cout<<"Abierto"<<endl;
     else cout<<"No abierto"<<endl;
-
     //Para LEEER POR LINEA
     cout<<"Por Linea: "<<endl;
     string hi;
